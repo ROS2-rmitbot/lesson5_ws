@@ -68,14 +68,14 @@ def generate_launch_description():
         ),
     )
     
+    # Careful and change the path of the navigation package --> lesson5_ws here
     nav2_in_new_terminal = ExecuteProcess(
     cmd=['xterm', '-hold', '-e', 'bash', '-lc',
          'source ~/rmitbot_v3/lesson5_ws/install/setup.bash; '
          'ros2 launch rmitbot_navigation nav.launch.py']
     )
-
     
-    # # Launch the navigation 3s after slamtoolbox, to make sure that a map is available
+    # Launch the navigation 10s after slamtoolbox, to make sure that a map is available
     navigation_delayed = TimerAction(
         period = 10., 
         actions=[nav2_in_new_terminal]
