@@ -1,4 +1,6 @@
-#BT: Behaviour Tree - decision-making brain of Nav2
+# ========================================================
+# BT: Behaviour Tree - decision-making brain of Nav2
+# ========================================================
 bt_navigator:
   ros__parameters:
     global_frame: map
@@ -13,20 +15,14 @@ bt_navigator:
       plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
     navigate_through_poses:
       plugin: "nav2_bt_navigator::NavigateThroughPosesNavigator"
-    # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
-    # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
-    # nav2_bt_navigator/navigate_through_poses_w_replanning_and_recovery.xml
-    # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
-
-    # plugin_lib_names is used to add custom BT plugins to the executor (vector of strings).
-    # Built-in plugins are added automatically
-    # plugin_lib_names: []
 
     error_code_names:
       - compute_path_error_code
       - follow_path_error_code
 
+# ========================================================
 # controller_server:= trajectory follower
+# ========================================================
 controller_server:
   ros__parameters:
     controller_frequency: 30. #20.
@@ -51,167 +47,21 @@ controller_server:
     general_goal_checker:
       stateful: true
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.10
-      yaw_goal_tolerance: 0.25
+      xy_goal_tolerance: 0.2 #0.2
+      yaw_goal_tolerance: 0.2 #0.25
 
-
-    # RotationShimController
-    # FollowPath:
-    #   plugin: "nav2_rotation_shim_controller::RotationShimController"
-    #   angular_dist_threshold: 0.785
-    #   forward_sampling_distance: 0.5
-    #   rotate_to_heading_angular_vel: 1.8
-    #   max_angular_accel: 3.2
-    #   simulate_ahead_time: 1.0
-
-    # RPP CONTROLLER
-    # FollowPath:
-    #   plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
-    #   desired_linear_vel: 1.0
-
-    #   lookahead_dist: 0.6
-    #   min_lookahead_dist: 0.3
-    #   max_lookahead_dist: 0.9
-    #   lookahead_time: 1.5
-    #   transform_tolerance: 0.1
-    #   use_velocity_scaled_lookahead_dist: false #true
-    #   min_approach_linear_velocity: 0.05
-    #   approach_velocity_scaling_dist: 0.6
-    #   use_collision_detection: true
-    #   max_allowed_time_to_collision_up_to_carrot: 1.0
-    #   use_regulated_linear_velocity_scaling: false #true 
-    #   use_fixed_curvature_lookahead: true
-    #   curvature_lookahead_dist: 0.5
-    #   use_cost_regulated_linear_velocity_scaling: false
-    #   cost_scaling_dist: 0.3
-    #   cost_scaling_gain: 1.0
-    #   regulated_linear_scaling_min_radius: 0.9
-    #   regulated_linear_scaling_min_speed: 0.08 #0.25
-
-    #   allow_reversing: false
-    #   use_rotate_to_heading: true 
-    #   rotate_to_heading_min_angle: 0.3 #0.785
-    #   rotate_to_heading_angular_vel: 1.8 
-    #   max_angular_accel: 6.2 #3.2
-    #   max_robot_pose_search_dist: 2.0
-    #   min_distance_to_obstacle: 0.0
-    #   stateful: true
-
-    # MPPI CONTROLLER
-    # FollowPath:
-    #   plugin: "nav2_mppi_controller::MPPIController"
-    #   motion_model: "Omni" # DiffDrive
-    #   time_steps: 32
-    #   model_dt: 0.05
-    #   batch_size: 1200
-    #   iteration_count: 3
-    #   prune_distance: 1.7 #1.7
-    #   transform_tolerance: 0.1
-
-    #   vx_std: 20.
-    #   vy_std: 20.2
-    #   wz_std: 40.1
-
-    #   vx_max: 100.
-    #   vx_min: -100.
-    #   vy_max: 100.
-    #   wz_max: 200.
-    #   ax_max: 2.
-    #   ay_max: 2.
-    #   az_max: 2.
-    #   ax_min: -2.
-    #   ay_min: -2.
-      
-    #   temperature: 0.3
-    #   gamma: 0.015
-    #   visualize: false
-    #   regenerate_noises: false
-
-    #   TrajectoryVisualizer:
-    #     trajectory_step: 5
-    #     time_step: 3
-
-    #   TrajectoryValidator:
-    #     plugin: "mppi::DefaultOptimalTrajectoryValidator"
-    #     collision_lookahead_time: 2.0
-    #     consider_footprint: false #false
-
-    #   critics: ["ConstraintCritic", "CostCritic", "GoalCritic", 
-    #             "GoalAngleCritic", "PathAlignCritic", "PathFollowCritic", 
-    #             "PathAngleCritic", "PreferForwardCritic", "TwirlingCritic"]
-      
-    #   # Goal critics
-    #   GoalCritic:
-    #     enabled: true
-    #     cost_power: 1
-    #     cost_weight: 12.0
-    #     threshold_to_consider: 999. # 2.5
-    #   GoalAngleCritic:
-    #     enabled: true
-    #     cost_power: 1
-    #     cost_weight: 8.0
-    #     threshold_to_consider: 999. # 2.5
-
-    #   # Path Critics
-    #   PathAlignCritic: # Stay close to the path”
-    #     enabled: false #true
-    #     cost_power: 1
-    #     cost_weight: 12.0
-    #     max_path_occupancy_ratio: 0.05
-    #     trajectory_point_step: 4
-    #     threshold_to_consider: 1.
-    #     offset_from_furthest: 20
-    #     use_path_orientations: false
-    #   PathFollowCritic: # Keep moving forward along the path
-    #     enabled: false #true
-    #     cost_power: 1
-    #     cost_weight: 24.0
-    #     offset_from_furthest: 5
-    #     threshold_to_consider: 1.
-    #   PathAngleCritic: # Face in the direction of the path heading
-    #     enabled: false #true
-    #     cost_power: 1
-    #     cost_weight: 4.0
-    #     offset_from_furthest: 4
-    #     threshold_to_consider: 1. #2.5
-    #     max_angle_to_furthest: 1.0
-    #     mode: 0
-      
-    #   # Behaviour critics
-    #   TwirlingCritic: # Penalize unecessary rotation
-    #     enabled: false # false
-    #     cost_weight: 20.0
-    #     cost_power: 1
-    #   ConstraintCritic: # Follow dynamics constraints (vel & acc)
-    #     enabled: false #true
-    #     cost_power: 1
-    #     cost_weight: 4.0
-    #   PreferForwardCritic: # Penalize backward movement and straffing
-    #     enabled: false
-    #     cost_power: 1
-    #     cost_weight: 10.0
-    #     threshold_to_consider: 0.5
-    #   CostCritic:   # Move Away from obstacle
-    #     enabled: false #true
-    #     cost_power: 1
-    #     cost_weight: 2.
-    #     critical_cost: 300.0
-    #     consider_footprint: false # true
-    #     collision_cost: 1000000.0
-    #     near_goal_distance: 1.0
-    #     trajectory_point_step: 2
 
     # DWB CONTROLLER
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
-      min_vel_x: -1.0
-      min_vel_y: -1.0
-      max_vel_x: 1.0
-      max_vel_y: 1.0
-      max_vel_theta: 2.0
-      min_speed_xy: -1.0
-      max_speed_xy: 1.0
+      min_vel_x: -0.7
+      min_vel_y: -0.7
+      max_vel_x: 0.7
+      max_vel_y: 0.7
+      max_vel_theta: 1.5
+      min_speed_xy: 0.
+      max_speed_xy: 0.7
       min_speed_theta: 0.0
       acc_lim_x: 2.0
       acc_lim_y: 2.0
@@ -219,39 +69,51 @@ controller_server:
       decel_lim_x: -2.0
       decel_lim_y: -2.0
       decel_lim_theta: -3.0
-      vx_samples: 20
-      vy_samples: 5
-      vtheta_samples: 5
+      vx_samples: 10
+      vy_samples: 0 #1
+      vtheta_samples: 10
       sim_time: 1.
-      linear_granularity: 0.2 # 0.05
-      angular_granularity: 0.5 # 0.025
+      linear_granularity: 0.05 # 0.05
+      angular_granularity: 0.025 # 0.025
       transform_tolerance: 0.4
-      xy_goal_tolerance: 0.1
+      xy_goal_tolerance: 0.2 #0.2
       trans_stopped_velocity: 0.05
       short_circuit_trajectory_evaluation: True
       limit_vel_cmd_in_traj: False
       stateful: True
-      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.5
+      critics: ["BaseObstacle", "GoalAlign", "GoalDist", "Oscillation", "PathAlign", "PathDist", "PreferForward", "RotateToGoal", "Twirling"]
+      # ros2 param set /controller_server FollowPath.GoalDist.scale 1.0
+      # ros2 param set /controller_server FollowPath.GoalAlign.scale 24.0
+      # ros2 param set /controller_server FollowPath.RotateToGoal.scale 40.0
+      # ros2 param set /controller_server FollowPath.PathAlign.scale 1.0
 
+      BaseObstacle:
+        scale: 0.5
       GoalAlign:
-        scale: 1. #24.0
-        forward_point_distance: 0.3
+        scale: 0. #24.0
+        forward_point_distance: 1.
       GoalDist:
-        scale: .2 #24.0
+        scale: .5 #24.0
+      Oscillation:
+        scale: 0.
+      PathAlign: 
+        scale: 0.
+        forward_point_distance: 1.
+      PathDist:
+        scale: 0.5 #32.0
+      PreferForward:
+        scale: 0.
       RotateToGoal:
         scale: 5. #32.0
         slowing_factor: 3.0
         lookahead_time: 5.0
-        xy_goal_tolerance: 0.3
+        xy_goal_tolerance: 0.2 #0.2
+      Twirling: 
+        scale: 0.0
 
-      PathAlign: 
-        scale: 0.
-        forward_point_distance: 0.6
-      PathDist:
-        scale: 1. #32.0
-
+# ========================================================
 # Eye of the navigation
+# ========================================================
 local_costmap:
   local_costmap:
     ros__parameters:
@@ -328,44 +190,30 @@ map_saver:
     occupied_thresh_default: 0.65
     map_subscribe_transient_local: True
 
-# Global path planning
-# planner_server:
-#   ros__parameters:
-#     expected_planner_frequency: 5.0
-#     planner_plugins: ["GridBased"]
-#     GridBased:
-#       plugin: "nav2_theta_star_planner::ThetaStarPlanner" # In Iron and older versions, "/" was used instead of "::"
-#       how_many_corners: 8
-#       w_euc_cost: 1.0
-#       w_traversal_cost: 2.0
-
+# ========================================================
+# planner_server: global path planner
+# ========================================================
 planner_server:
   ros__parameters:
     planner_plugins: ['GridBased']
-
-    # GridBased:
-    #   plugin: "nav2_smac_planner::SmacPlanner2D" # In Iron and older versions, "/" was used instead of "::"
-    #   tolerance: 0.125                      # tolerance for planning if unable to reach exact pose, in meters
-    #   downsample_costmap: false             # whether or not to downsample the map
-    #   downsampling_factor: 1                # multiplier for the resolution of the costmap layer (e.g. 2 on a 5cm costmap would be 10cm)
-    #   allow_unknown: true                   # allow traveling in unknown space
-    #   max_iterations: 1000000               # maximum total iterations to search for before failing (in case unreachable), set to -1 to disable
-    #   max_on_approach_iterations: 1000      # maximum number of iterations to attempt to reach goal once in tolerance
-    #   max_planning_time: 2.0                # max time in s for planner to plan, smooth
-    #   cost_travel_multiplier: 2.0           # Cost multiplier to apply to search to steer away from high cost areas. Larger values will place in the center of aisles more exactly (if non-`FREE` cost potential field exists) but take slightly longer to compute. To optimize for speed, a value of 1.0 is reasonable. A reasonable tradeoff value is 2.0. A value of 0.0 effective disables steering away from obstacles and acts like a naive binary search A*.
-    #   use_final_approach_orientation: false # Whether to set the final path pose at the goal's orientation to the requested orientation (false) or in line with the approach angle so the robot doesn't rotate to heading (true)
-    #   smoother:
-    #     max_iterations: 1000
-    #     w_smooth: 0.3
-    #     w_data: 0.2
-    #     tolerance: 1.0e-10
+    expected_planner_frequency: 5.0
 
     # Default NavPlanner
     GridBased:
-      plugin: 'nav2_navfn_planner::NavfnPlanner' # In Iron and older versions, "/" was used instead of "::"
-      use_astar: True
-      allow_unknown: True
-      tolerance: 1.0
+      # plugin: 'nav2_navfn_planner::NavfnPlanner' 
+      # use_astar: True
+      # allow_unknown: True
+      # tolerance: 1.0
+      plugin: "nav2_smac_planner::SmacPlannerHybrid"
+      angle_quantization_bins: 64
+      minimum_turning_radius: 0.0     # holonomic (mecanum)
+      retrospective_penalty: 0.0
+      smooth_path: true
+      downsample_costmap: false
+      goal_heading_mode: "BIDIRECTIONAL"
+      reverse_penalty: 1.0
+      change_penalty: 1.0
+      non_straight_penalty: 1.0
 
 
 # Refines planner paths before controller consumes them
@@ -378,7 +226,9 @@ smoother_server:
       max_its: 500
       do_refinement: True
 
+# ========================================================
 # Recovery and auxiliary actions
+# ========================================================
 behavior_server:
   ros__parameters:
     local_costmap_topic: local_costmap/costmap_raw
