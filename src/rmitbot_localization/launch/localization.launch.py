@@ -18,7 +18,7 @@ def generate_launch_description():
         name=       "ekf_filter_node",
         output=     "screen",
         parameters=[config_localization],
-        remappings=[('odometry/filtered', 'odom_efk')]
+        remappings=[('odometry/filtered', 'odom_ekf')]
 
     )
 

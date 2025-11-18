@@ -33,10 +33,10 @@ def generate_launch_description():
     
     # Spawn the robot in Gazebo
     gz_spawn_entity = Node(
-        package="ros_gz_sim",
-        executable="create",
-        output="screen",
-        arguments=["-topic", "robot_description","-name", "rmitbot"],
+        package=    "ros_gz_sim",
+        executable= "create",
+        output=     "screen",
+        arguments=  ["-topic", "robot_description","-name", "rmitbot"],
     )
 
     # Bridge between ROS2 and Gazebo
